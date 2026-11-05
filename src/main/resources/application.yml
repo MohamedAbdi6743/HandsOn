@@ -21,3 +21,9 @@ spring:
 server:
   # Change APP_PORT in .env if 8080 is already used on your machine.
   port: ${APP_PORT:8080}
+
+handson:
+  # The first coordinator account, created at startup if it doesn't exist yet.
+  admin:
+    email: ${HANDSON_ADMIN_EMAIL:}
+    password: ${HANDSON_ADMIN_PASSWORD:}

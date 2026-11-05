@@ -456,6 +456,10 @@ For validation errors (`400`), `fieldErrors` lists each problem, e.g.
 | POST | `/api/auth/login` | Public | Log in (starts a session) | 200 | 401 |
 | POST | `/api/auth/logout` | Any | Log out | 204 | – |
 | GET | `/api/auth/me` | Any | Who am I? | 200 | 401 |
+| GET | `/api/auth/csrf` | Public | Sends the `XSRF-TOKEN` cookie (called once on page load) | 204 | – |
+
+Login takes form fields (`email`, `password`), not JSON, because it uses Spring Security's
+built-in login handling.
 
 ```http
 POST /api/auth/register
@@ -647,10 +651,10 @@ Each milestone is built, tested, explained and committed before the next one sta
 
 1. **Project setup:** Spring Boot skeleton, PostgreSQL in Docker, Flyway `V1` schema,
    app starts and connects.
-2. **Events & shifts API:** entities, repositories, services, controllers, validation,
-   global error handler, tests.
-3. **Users & security:** registration, login/logout, roles, CSRF, first coordinator
-   account, security tests.
+2. **Users & security:** registration, login/logout, roles, CSRF, first coordinator
+   account, global error handler, security tests. (Done before events because creating an
+   event and signing up both need to know who the logged-in user is.)
+3. **Events & shifts API:** entities, repositories, services, controllers, validation, tests.
 4. **Sign-up rules:** capacity, duplicates, overlap, waitlist, cancel cutoff, promotion,
    row locking. Unit tests for every rule, plus a concurrency test.
 5. **Attendance & reports:** marking attendance, hours query, report endpoints.

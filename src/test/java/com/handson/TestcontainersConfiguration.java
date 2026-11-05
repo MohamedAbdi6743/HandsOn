@@ -12,11 +12,11 @@ import org.testcontainers.utility.DockerImageName;
  * @ServiceConnection points Spring's datasource at this container automatically.
  */
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
 	@Bean
 	@ServiceConnection
-	PostgreSQLContainer postgresContainer() {
+	public PostgreSQLContainer postgresContainer() {
 		return new PostgreSQLContainer(DockerImageName.parse("postgres:18-alpine"));
 	}
 
