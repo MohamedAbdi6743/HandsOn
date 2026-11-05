@@ -138,6 +138,25 @@ public class SignupService {
 		return toResponse(signup);
 	}
 
+	/** A coordinator records whether a confirmed volunteer showed up. */
+	@Transactional
+	public SignupResponse recordAttendance(Long signupId, boolean attended) {
+		Signup signup = signupRepository.findById(signupId)
+				.orElseThrow(() -> new NotFoundException("Sign-up not found."));
+		LocalDateTime now = LocalDateTime.now(clock);
+
+		if (signup.getShift().getStartTime().isAfter(now)) {
+			throw new BusinessRuleException("Attendance can only be recorded once the shift has started.");
+		}
+		if (!signup.canRecordAttendance()) {
+			throw new BusinessRuleException("Only confirmed volunteers can be marked as attended or no-show.");
+		}
+
+		signup.recordAttendance(attended, now);
+		log.info("Sign-up {} marked {}", signupId, signup.getStatus());
+		return toResponse(signup);
+	}
+
 	/**
 	 * Moves people from the waitlist into free spots, first come first served.
 	 * The caller must already hold the shift's lock (see lockShift).

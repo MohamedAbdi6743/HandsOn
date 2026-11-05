@@ -78,6 +78,17 @@ public class Signup {
 		this.updatedAt = now;
 	}
 
+	/** Recorded by a coordinator after the shift starts. Can be changed if it was marked wrong. */
+	public void recordAttendance(boolean attended, LocalDateTime now) {
+		this.status = attended ? SignupStatus.ATTENDED : SignupStatus.NO_SHOW;
+		this.updatedAt = now;
+	}
+
+	/** Confirmed, or attendance already recorded (so a mistake can be corrected). */
+	public boolean canRecordAttendance() {
+		return status == SignupStatus.CONFIRMED || status == SignupStatus.ATTENDED || status == SignupStatus.NO_SHOW;
+	}
+
 	public Long getId() {
 		return id;
 	}

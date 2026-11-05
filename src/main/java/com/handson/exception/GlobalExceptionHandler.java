@@ -47,6 +47,11 @@ public class GlobalExceptionHandler {
 		return respond(ApiError.of(HttpStatus.BAD_REQUEST, "Invalid value for '" + ex.getName() + "'."));
 	}
 
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
+		return respond(ApiError.of(HttpStatus.BAD_REQUEST, ex.getMessage()));
+	}
+
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
 		return respond(ApiError.of(HttpStatus.NOT_FOUND, ex.getMessage()));
