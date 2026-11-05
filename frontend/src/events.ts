@@ -30,18 +30,22 @@ async function main(): Promise<void> {
 }
 
 function renderEventCard(event: EventDetails): HTMLElement {
+  // Only shifts that haven't ended matter here: their dates and their open spots.
+  const now = new Date();
+  const upcomingShifts = event.shifts.filter((shift) => new Date(shift.endTime) > now);
+
   let openSpots = 0;
-  for (const shift of event.shifts) {
+  for (const shift of upcomingShifts) {
     openSpots += shift.spotsLeft;
   }
 
-  const firstShift = event.shifts[0];
-  const when = firstShift ? formatShiftTime(firstShift.startTime, firstShift.endTime) : "No shifts added yet";
+  const nextShift = upcomingShifts[0];
+  const when = nextShift ? formatShiftTime(nextShift.startTime, nextShift.endTime) : "No shifts added yet";
 
   let summary: string | null = null;
-  if (event.shifts.length > 0) {
+  if (upcomingShifts.length > 0) {
     const spots = openSpots === 0 ? "all spots filled" : `${plural(openSpots, "spot")} open`;
-    summary = `${plural(event.shifts.length, "shift")} · ${spots}`;
+    summary = `${plural(upcomingShifts.length, "upcoming shift")} · ${spots}`;
   }
 
   return el("article", { className: "card" }, [

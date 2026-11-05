@@ -1,9 +1,11 @@
 package com.handson.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -133,6 +135,13 @@ class AuthApiTest {
 
 		mockMvc.perform(get("/api/auth/me").session(session))
 				.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	void pagesAreServedWithContentSecurityPolicy() throws Exception {
+		mockMvc.perform(get("/index.html"))
+				.andExpect(status().isOk())
+				.andExpect(header().string("Content-Security-Policy", containsString("script-src 'self'")));
 	}
 
 	@Test

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Volunteer hours · HandsOn</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/reports.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">HandsOn</a>
+    <nav id="nav" aria-label="Main"></nav>
+  </header>
+
+  <main class="container">
+    <h1>Volunteer hours</h1>
+    <p class="muted">Counts shifts marked as attended, for shifts that started within the dates below.</p>
+
+    <form id="report-form" class="form card">
+      <div class="field-row">
+        <div class="field">
+          <label for="from">From</label>
+          <input id="from" name="from" type="date" required>
+        </div>
+        <div class="field">
+          <label for="to">To</label>
+          <input id="to" name="to" type="date" required>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button id="report-button" class="button button-primary" type="submit">Show report</button>
+      </div>
+    </form>
+
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <p id="empty-report" class="empty" hidden>No attended shifts in this date range.</p>
+    <div class="table-wrapper">
+      <table id="report-table" hidden>
+        <thead>
+          <tr>
+            <th scope="col">Volunteer</th>
+            <th scope="col">Email</th>
+            <th scope="col" class="number">Shifts</th>
+            <th scope="col" class="number">Hours</th>
+          </tr>
+        </thead>
+        <tbody id="report-rows"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">Total</td>
+            <td id="total-shifts" class="number"></td>
+            <td id="total-hours" class="number"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

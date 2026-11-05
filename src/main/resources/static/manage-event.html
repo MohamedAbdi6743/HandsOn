@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New event · HandsOn</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/manage-event.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">HandsOn</a>
+    <nav id="nav" aria-label="Main"></nav>
+  </header>
+
+  <main class="container">
+    <div class="page-heading">
+      <h1 id="page-title">Event</h1>
+      <a id="view-event-link" class="button button-secondary" href="#" hidden>View event page</a>
+    </div>
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <form id="event-form" class="form card">
+      <div class="field">
+        <label for="event-title">Title</label>
+        <input id="event-title" name="title" type="text" maxlength="120" required>
+        <p class="field-error" data-error-for="title"></p>
+      </div>
+      <div class="field">
+        <label for="event-location">Location</label>
+        <input id="event-location" name="location" type="text" maxlength="200" required>
+        <p class="field-error" data-error-for="location"></p>
+      </div>
+      <div class="field">
+        <label for="event-description">Description <span class="muted">(optional)</span></label>
+        <textarea id="event-description" name="description" maxlength="2000"></textarea>
+        <p class="field-error" data-error-for="description"></p>
+      </div>
+      <div class="form-actions">
+        <button id="save-event-button" class="button button-primary" type="submit">Save event</button>
+      </div>
+    </form>
+
+    <section id="shift-section" hidden>
+      <h2>Shifts</h2>
+      <p id="no-shifts" class="empty">No shifts yet. Add the first one below.</p>
+      <div class="table-wrapper">
+        <table id="shift-table" hidden>
+          <thead>
+            <tr>
+              <th scope="col">Shift</th>
+              <th scope="col">When</th>
+              <th scope="col" class="number">Filled</th>
+              <th scope="col" class="number">Waitlist</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="shift-rows"></tbody>
+        </table>
+      </div>
+
+      <form id="shift-form" class="form card">
+        <h3 id="shift-form-title">Add a shift</h3>
+        <div class="field">
+          <label for="shift-title">Shift name</label>
+          <input id="shift-title" name="title" type="text" maxlength="80" placeholder="Setup crew" required>
+          <p class="field-error" data-error-for="title"></p>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="shift-start">Starts</label>
+            <input id="shift-start" name="startTime" type="datetime-local" required>
+            <p class="field-error" data-error-for="startTime"></p>
+          </div>
+          <div class="field">
+            <label for="shift-end">Ends</label>
+            <input id="shift-end" name="endTime" type="datetime-local" required>
+            <p class="field-error" data-error-for="endTime"></p>
+            <p class="field-error" data-error-for="endAfterStart"></p>
+          </div>
+          <div class="field">
+            <label for="shift-capacity">Volunteers needed</label>
+            <input id="shift-capacity" name="capacity" type="number" min="1" max="500" required>
+            <p class="field-error" data-error-for="capacity"></p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button id="save-shift-button" class="button button-primary" type="submit">Add shift</button>
+          <button id="cancel-edit-button" class="button button-secondary" type="button" hidden>Cancel editing</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="danger-zone" hidden>
+      <h2>Delete event</h2>
+      <p class="muted">Only possible while nobody is signed up for its shifts.</p>
+      <button id="delete-event-button" class="button button-danger" type="button">Delete event</button>
+    </section>
+  </main>
+</body>
+</html>

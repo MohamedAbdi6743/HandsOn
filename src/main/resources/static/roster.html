@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roster · HandsOn</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/roster.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">HandsOn</a>
+    <nav id="nav" aria-label="Main"></nav>
+  </header>
+
+  <main class="container">
+    <p><a id="event-link" href="index.html">← Back</a></p>
+    <h1 id="shift-title">Roster</h1>
+    <p id="shift-time" class="muted"></p>
+    <p id="shift-summary"></p>
+    <p id="attendance-note" class="message message-info" hidden>Attendance can be recorded once the shift starts.</p>
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <p id="empty-roster" class="empty" hidden>Nobody has signed up yet.</p>
+    <div class="table-wrapper">
+      <table id="roster-table" hidden>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Attendance</th>
+          </tr>
+        </thead>
+        <tbody id="roster-rows"></tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

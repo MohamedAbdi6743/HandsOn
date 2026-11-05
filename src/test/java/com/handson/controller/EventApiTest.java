@@ -211,6 +211,23 @@ class EventApiTest {
 				.andExpect(jsonPath("$[*].id").value(not(hasItem((int) pastEventId))));
 	}
 
+	@Test
+	void eventsAreOrderedByTheirNextShiftNotTheirFirst() throws Exception {
+		// "Later Event" has a shift that already ended yesterday, plus one in two weeks.
+		long laterEventId = createEvent("Later Event");
+		Event laterEvent = eventRepository.findById(laterEventId).orElseThrow();
+		LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+		shiftRepository.save(new Shift(laterEvent, "Yesterday", yesterday, yesterday.plusHours(1), 3));
+		addShift(laterEventId, "In two weeks", NEXT_WEEK_8AM.plusDays(7), NEXT_WEEK_8AM.plusDays(7).plusHours(2), 3);
+
+		long soonerEventId = createEvent("Sooner Event");
+		addShift(soonerEventId, "Next week", NEXT_WEEK_8AM, NEXT_WEEK_8AM.plusHours(2), 3);
+
+		mockMvc.perform(get("/api/events").with(VOLUNTEER))
+				.andExpect(jsonPath("$[0].title").value("Sooner Event"))
+				.andExpect(jsonPath("$[1].title").value("Later Event"));
+	}
+
 	// ---------- shifts ----------
 
 	@Test
