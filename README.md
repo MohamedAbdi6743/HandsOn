@@ -15,11 +15,14 @@ Frontend (coming later): TypeScript, HTML, CSS.
 
 You need Java 21 and Docker. Maven is not required; the project includes the Maven Wrapper.
 
-1. Create your local settings file and set a password:
+1. Create your local settings file, then open it and set your own passwords:
 
    ```bash
    cp .env.example .env
    ```
+
+   `HANDSON_ADMIN_EMAIL` and `HANDSON_ADMIN_PASSWORD` create the first coordinator account
+   when the app starts. Public sign-up only creates volunteer accounts.
 
 2. Start PostgreSQL:
 
