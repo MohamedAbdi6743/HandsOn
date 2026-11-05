@@ -45,6 +45,9 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/auth/csrf").permitAll()
+				// Rules are checked top to bottom; the first match wins.
+				.requestMatchers(HttpMethod.GET, "/api/events/**").authenticated()
+				.requestMatchers("/api/events/**", "/api/shifts/**").hasRole("COORDINATOR")
 				.requestMatchers("/api/**").authenticated()
 				// HTML, CSS and JS files are public. The data they show comes from /api, which is protected.
 				.anyRequest().permitAll())
