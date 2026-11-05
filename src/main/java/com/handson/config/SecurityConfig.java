@@ -61,6 +61,12 @@ public class SecurityConfig {
 			// so it can't forge that header.
 			.csrf(csrf -> csrf.spa())
 
+			// Content-Security-Policy: the browser only runs scripts and styles served by this
+			// site, and refuses inline ones. A second line of defense against XSS.
+			.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+				"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+					+ "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'")))
+
 			// POST /api/auth/login with form fields "email" and "password".
 			.formLogin(form -> form
 				.loginProcessingUrl("/api/auth/login")

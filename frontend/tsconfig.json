@@ -1,0 +1,18 @@
+{
+  // Compiles frontend/src/*.ts into plain JavaScript modules that browsers load directly.
+  // No bundler: each page has <script type="module" src="js/<page>.js">.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "rootDir": "src",
+    "outDir": "../src/main/resources/static/js",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}

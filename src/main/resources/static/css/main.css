@@ -1,0 +1,422 @@
+/* HandsOn styles. Mobile first: the base rules are for small screens, and
+   the @media (min-width: ...) blocks adjust layouts on wider ones. */
+
+/* ---------- colors and spacing, in one place ---------- */
+
+:root {
+  --color-bg: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-text: #1d1f22;
+  --color-muted: #5c6370;
+  --color-border: #dcdfe3;
+  --color-primary: #1f6f5c;
+  --color-primary-hover: #185a4a;
+  --color-primary-text: #ffffff;
+  --color-danger: #b42318;
+  --color-success-bg: #e7f5ee;
+  --color-success-text: #145c3a;
+  --color-error-bg: #fdecea;
+  --color-error-text: #8f1d14;
+  --color-info-bg: #eaf1fb;
+  --color-info-text: #1d4d8f;
+  --color-focus: #2a6fdb;
+
+  --radius: 8px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #15171a;
+    --color-surface: #1e2125;
+    --color-text: #e8eaed;
+    --color-muted: #a3a9b3;
+    --color-border: #343941;
+    --color-primary: #3fae8f;
+    --color-primary-hover: #57c2a3;
+    --color-primary-text: #0d1f1a;
+    --color-danger: #f0776c;
+    --color-success-bg: #133325;
+    --color-success-text: #9be3bf;
+    --color-error-bg: #3a1714;
+    --color-error-text: #f6b4ad;
+    --color-info-bg: #16263d;
+    --color-info-text: #a9c8f2;
+  }
+}
+
+/* ---------- base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+h1, h2, h3 {
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+}
+
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.25rem; margin-top: var(--space-4); }
+h3 { font-size: 1.05rem; }
+
+p { margin: 0 0 var(--space-2); }
+
+a { color: var(--color-primary); }
+a:hover { color: var(--color-primary-hover); }
+
+/* A clearly visible outline for keyboard users. */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.muted { color: var(--color-muted); }
+
+/* Hidden on screen but still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.empty { color: var(--color-muted); font-style: italic; }
+.description { white-space: pre-line; max-width: 65ch; }
+.summary { font-size: 1.1rem; }
+
+/* ---------- layout ---------- */
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3);
+}
+
+.container.narrow {
+  max-width: 460px;
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+#nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.nav-user {
+  color: var(--color-muted);
+}
+
+.page-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* ---------- cards ---------- */
+
+.card-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+.card-title {
+  margin-top: 0;
+}
+
+.card-title a {
+  text-decoration: none;
+}
+
+.shift-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.shift-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+@media (min-width: 640px) {
+  .card-list.two-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .shift-card {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* ---------- buttons ---------- */
+
+.button {
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.button-primary {
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+.button-primary:hover {
+  background: var(--color-primary-hover);
+  color: var(--color-primary-text);
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.button-secondary:hover {
+  border-color: var(--color-muted);
+  color: var(--color-text);
+}
+
+.button-danger {
+  background: transparent;
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.button-small {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ---------- status badges ---------- */
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--color-info-bg);
+  color: var(--color-info-text);
+}
+
+.badge-confirmed,
+.badge-attended {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.badge-no_show,
+.badge-cancelled {
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+/* ---------- messages ---------- */
+
+.message:empty {
+  display: none;
+}
+
+.message {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  margin: var(--space-3) 0;
+}
+
+.message-info { background: var(--color-info-bg); color: var(--color-info-text); }
+.message-success { background: var(--color-success-bg); color: var(--color-success-text); }
+.message-error { background: var(--color-error-bg); color: var(--color-error-text); }
+
+/* ---------- forms ---------- */
+
+.form {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.field-row {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .field-row {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+label {
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.field-error {
+  font-size: 0.9rem;
+  color: var(--color-danger);
+  margin: 0;
+}
+
+.field-error:empty {
+  display: none;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ---------- tables ---------- */
+
+.table-wrapper {
+  overflow-x: auto;
+  /* Keeps absolutely positioned children (like .visually-hidden labels) inside the
+     scrolling box, so they can't stretch the whole page sideways on small screens. */
+  position: relative;
+}
+
+table {
+  width: 100%;
+  /* On phones the table scrolls sideways inside .table-wrapper instead of squeezing its columns. */
+  min-width: 36rem;
+  border-collapse: collapse;
+  background: var(--color-surface);
+}
+
+th,
+td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+th {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+td.number,
+th.number {
+  text-align: right;
+}
+
+tfoot td {
+  font-weight: 700;
+}

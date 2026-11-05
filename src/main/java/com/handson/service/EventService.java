@@ -51,10 +51,11 @@ public class EventService {
 		this.clock = clock;
 	}
 
-	/** Upcoming events with their shifts, soonest first. */
+	/** Upcoming events with their shifts, ordered by each event's next shift. */
 	@Transactional(readOnly = true)
 	public List<EventResponse> listUpcomingEvents(String viewerEmail) {
-		List<Event> events = eventRepository.findUpcoming(LocalDateTime.now(clock));
+		LocalDateTime now = LocalDateTime.now(clock);
+		List<Event> events = eventRepository.findUpcoming(now);
 		if (events.isEmpty()) {
 			return List.of();
 		}
@@ -62,7 +63,7 @@ public class EventService {
 		List<Shift> shifts = shiftRepository.findByEventIdInOrderByStartTime(eventIds);
 
 		List<EventResponse> responses = buildResponses(events, shifts, viewerEmail);
-		responses.sort(Comparator.comparing(EventService::firstShiftStart));
+		responses.sort(Comparator.comparing(event -> nextShiftStart(event, now)));
 		return responses;
 	}
 
@@ -140,12 +141,14 @@ public class EventService {
 				.orElseThrow(() -> new NotFoundException("Event not found."));
 	}
 
-	/** Events without shifts sort last. */
-	private static LocalDateTime firstShiftStart(EventResponse event) {
-		if (event.shifts().isEmpty()) {
-			return LocalDateTime.MAX;
+	/** Start of the first shift that hasn't ended yet. Events without one sort last. */
+	private static LocalDateTime nextShiftStart(EventResponse event, LocalDateTime now) {
+		for (ShiftResponse shift : event.shifts()) {
+			if (shift.endTime().isAfter(now)) {
+				return shift.startTime();
+			}
 		}
-		return event.shifts().get(0).startTime();
+		return LocalDateTime.MAX;
 	}
 
 	private static String cleanDescription(String description) {

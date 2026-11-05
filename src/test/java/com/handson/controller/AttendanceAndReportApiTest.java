@@ -88,6 +88,16 @@ class AttendanceAndReportApiTest {
 	}
 
 	@Test
+	void attendedVolunteersStillCountAsFillingTheShift() throws Exception {
+		Signup signup = signup(sam, shift(JUNE_10_9AM, 2.0), SignupStatus.CONFIRMED);
+		markAttendance(signup.getId(), true);
+
+		mockMvc.perform(get("/api/events/" + event.getId()).with(COORDINATOR))
+				.andExpect(jsonPath("$.shifts[0].confirmedCount").value(1))
+				.andExpect(jsonPath("$.shifts[0].spotsLeft").value(4));
+	}
+
+	@Test
 	void attendanceCanBeCorrected() throws Exception {
 		Signup signup = signup(sam, shift(JUNE_10_9AM, 2.0), SignupStatus.NO_SHOW);
 

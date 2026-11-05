@@ -221,20 +221,24 @@ public class SignupService {
 		return onShift;
 	}
 
-	/** Confirmed and waitlisted counts for many shifts, using one query. */
+	/**
+	 * For display: how many people hold a spot and how many are waitlisted, for many shifts
+	 * in one query. Once a shift has happened, attended and no-show people still held a spot,
+	 * so they count as "confirmed" here.
+	 */
 	@Transactional(readOnly = true)
 	public Map<Long, ShiftCounts> countsForShifts(Collection<Long> shiftIds) {
 		Map<Long, ShiftCounts> counts = new HashMap<>();
 		if (shiftIds.isEmpty()) {
 			return counts;
 		}
-		for (ShiftStatusCount row : signupRepository.countByShiftAndStatus(shiftIds, ACTIVE)) {
+		for (ShiftStatusCount row : signupRepository.countByShiftAndStatus(shiftIds, BLOCKS_DELETION)) {
 			ShiftCounts current = counts.getOrDefault(row.shiftId(), ShiftCounts.NONE);
-			if (row.status() == SignupStatus.CONFIRMED) {
-				counts.put(row.shiftId(), new ShiftCounts(row.count(), current.waitlisted()));
+			if (row.status() == SignupStatus.WAITLISTED) {
+				counts.put(row.shiftId(), new ShiftCounts(current.confirmed(), row.count()));
 			}
 			else {
-				counts.put(row.shiftId(), new ShiftCounts(current.confirmed(), row.count()));
+				counts.put(row.shiftId(), new ShiftCounts(current.confirmed() + row.count(), current.waitlisted()));
 			}
 		}
 		return counts;
