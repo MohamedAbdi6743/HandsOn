@@ -35,13 +35,13 @@ public class EventController {
 	}
 
 	@GetMapping
-	public List<EventResponse> listUpcomingEvents() {
-		return eventService.listUpcomingEvents();
+	public List<EventResponse> listUpcomingEvents(Authentication authentication) {
+		return eventService.listUpcomingEvents(authentication.getName());
 	}
 
 	@GetMapping("/{eventId}")
-	public EventResponse getEvent(@PathVariable Long eventId) {
-		return eventService.getEvent(eventId);
+	public EventResponse getEvent(@PathVariable Long eventId, Authentication authentication) {
+		return eventService.getEvent(eventId, authentication.getName());
 	}
 
 	@PostMapping
@@ -51,8 +51,9 @@ public class EventController {
 	}
 
 	@PutMapping("/{eventId}")
-	public EventResponse updateEvent(@PathVariable Long eventId, @Valid @RequestBody EventRequest request) {
-		return eventService.updateEvent(eventId, request);
+	public EventResponse updateEvent(@PathVariable Long eventId, @Valid @RequestBody EventRequest request,
+			Authentication authentication) {
+		return eventService.updateEvent(eventId, request, authentication.getName());
 	}
 
 	@DeleteMapping("/{eventId}")

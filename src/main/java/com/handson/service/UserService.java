@@ -1,6 +1,7 @@
 package com.handson.service;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,12 @@ public class UserService {
 	public AppUser getByEmail(String email) {
 		return userRepository.findByEmail(normalizeEmail(email))
 				.orElseThrow(() -> new NotFoundException("User not found."));
+	}
+
+	/** Like getByEmail, but returns an empty Optional instead of throwing when there's no such user. */
+	@Transactional(readOnly = true)
+	public Optional<AppUser> findByEmail(String email) {
+		return userRepository.findByEmail(normalizeEmail(email));
 	}
 
 	@Transactional(readOnly = true)

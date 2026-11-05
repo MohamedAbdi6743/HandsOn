@@ -47,6 +47,9 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/api/auth/csrf").permitAll()
 				// Rules are checked top to bottom; the first match wins.
 				.requestMatchers(HttpMethod.GET, "/api/events/**").authenticated()
+				// Volunteer actions come before the coordinator rule, which also matches /api/shifts/**.
+				.requestMatchers(HttpMethod.POST, "/api/shifts/*/signups", "/api/signups/*/cancel").hasRole("VOLUNTEER")
+				.requestMatchers("/api/me/**").hasRole("VOLUNTEER")
 				.requestMatchers("/api/events/**", "/api/shifts/**").hasRole("COORDINATOR")
 				.requestMatchers("/api/**").authenticated()
 				// HTML, CSS and JS files are public. The data they show comes from /api, which is protected.
