@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: HandsOn
+
+  # Load local settings (database password etc.) from the .env file if it exists.
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5440/handson}
+    username: ${DB_USERNAME:handson}
+    password: ${DB_PASSWORD:}
+
+  jpa:
+    hibernate:
+      # Flyway creates and changes tables. Hibernate only checks they match our entities.
+      ddl-auto: validate
+    # Keep database work inside the service layer instead of during JSON rendering.
+    open-in-view: false
+
+server:
+  # Change APP_PORT in .env if 8080 is already used on your machine.
+  port: ${APP_PORT:8080}

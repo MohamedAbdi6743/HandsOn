@@ -1,0 +1,24 @@
+# Local development database.
+# Start it with:  docker compose up -d
+# Stop it with:   docker compose down        (data is kept in the volume)
+# Docker Compose reads DB_PORT, DB_USERNAME and DB_PASSWORD from the .env file.
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: handson
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      # Only reachable from this computer, not from the network.
+      # Uses 5440 on your machine so it doesn't clash with another PostgreSQL on the default 5432.
+      - "127.0.0.1:${DB_PORT:-5440}:5432"
+    volumes:
+      - handson-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d handson"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  handson-data:
