@@ -1,0 +1,12 @@
+{
+  "name": "handson-frontend",
+  "private": true,
+  "description": "TypeScript for the HandsOn pages. Compiled into src/main/resources/static/js, which Spring Boot serves.",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

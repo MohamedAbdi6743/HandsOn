@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My shifts · HandsOn</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/my-shifts.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">HandsOn</a>
+    <nav id="nav" aria-label="Main"></nav>
+  </header>
+
+  <main class="container">
+    <h1>My shifts</h1>
+    <p id="hours-summary" class="summary"></p>
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <h2>Upcoming</h2>
+    <section id="upcoming-list" class="card-list" aria-label="Upcoming shifts">
+      <p class="muted">Loading…</p>
+    </section>
+
+    <h2>Past</h2>
+    <section id="past-list" class="card-list" aria-label="Past shifts"></section>
+  </main>
+</body>
+</html>
