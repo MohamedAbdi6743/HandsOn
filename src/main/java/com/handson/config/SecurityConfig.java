@@ -50,6 +50,7 @@ public class SecurityConfig {
 				// Volunteer actions come before the coordinator rule, which also matches /api/shifts/**.
 				.requestMatchers(HttpMethod.POST, "/api/shifts/*/signups", "/api/signups/*/cancel").hasRole("VOLUNTEER")
 				.requestMatchers("/api/me/**").hasRole("VOLUNTEER")
+				.requestMatchers("/api/signups/*/attendance", "/api/reports/**").hasRole("COORDINATOR")
 				.requestMatchers("/api/events/**", "/api/shifts/**").hasRole("COORDINATOR")
 				.requestMatchers("/api/**").authenticated()
 				// HTML, CSS and JS files are public. The data they show comes from /api, which is protected.

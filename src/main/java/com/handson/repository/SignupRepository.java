@@ -68,6 +68,39 @@ public interface SignupRepository extends JpaRepository<Signup, Long> {
 			""")
 	List<Signup> findForVolunteer(@Param("userId") Long userId, @Param("excluded") SignupStatus excluded);
 
+	/**
+	 * Hours per volunteer for shifts that started in [from, to), counting ATTENDED only.
+	 * Plain SQL so PostgreSQL can do the date math: end_time - start_time is an interval,
+	 * EXTRACT(EPOCH ...) turns it into seconds, and / 3600 into hours.
+	 * The aliases are in double quotes so PostgreSQL keeps their capital letters.
+	 */
+	@Query(value = """
+			SELECT u.id AS "userId",
+			       u.full_name AS "fullName",
+			       u.email AS "email",
+			       COUNT(*) AS "shiftsAttended",
+			       SUM(EXTRACT(EPOCH FROM (sh.end_time - sh.start_time)) / 3600) AS "totalHours"
+			FROM signup su
+			JOIN shift sh ON sh.id = su.shift_id
+			JOIN app_user u ON u.id = su.user_id
+			WHERE su.status = 'ATTENDED'
+			  AND sh.start_time >= :from
+			  AND sh.start_time < :to
+			GROUP BY u.id, u.full_name, u.email
+			ORDER BY "totalHours" DESC, "fullName"
+			""", nativeQuery = true)
+	List<VolunteerHoursRow> sumAttendedHours(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+	/** All-time totals for one volunteer. COALESCE turns "no rows" (NULL) into 0. */
+	@Query(value = """
+			SELECT COUNT(*) AS "shiftsAttended",
+			       COALESCE(SUM(EXTRACT(EPOCH FROM (sh.end_time - sh.start_time)) / 3600), 0) AS "totalHours"
+			FROM signup su
+			JOIN shift sh ON sh.id = su.shift_id
+			WHERE su.user_id = :userId AND su.status = 'ATTENDED'
+			""", nativeQuery = true)
+	HoursTotalRow sumAttendedHoursForUser(@Param("userId") Long userId);
+
 	/** Everyone on a shift (with their user details), in the order they joined. */
 	@Query("""
 			SELECT s FROM Signup s JOIN FETCH s.user

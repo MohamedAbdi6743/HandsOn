@@ -7,13 +7,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.handson.dto.AttendanceRequest;
 import com.handson.dto.MySignupResponse;
 import com.handson.dto.RosterEntryResponse;
 import com.handson.dto.SignupResponse;
 import com.handson.service.SignupService;
+
+import jakarta.validation.Valid;
 
 /**
  * Sign-up endpoints. Volunteers sign up, cancel and see their own shifts;
@@ -49,6 +54,11 @@ public class SignupController {
 	@GetMapping("/api/shifts/{shiftId}/signups")
 	public List<RosterEntryResponse> roster(@PathVariable Long shiftId) {
 		return signupService.getRoster(shiftId);
+	}
+
+	@PutMapping("/api/signups/{signupId}/attendance")
+	public SignupResponse recordAttendance(@PathVariable Long signupId, @Valid @RequestBody AttendanceRequest request) {
+		return signupService.recordAttendance(signupId, request.attended());
 	}
 
 }
