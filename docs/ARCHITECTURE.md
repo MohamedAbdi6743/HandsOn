@@ -512,7 +512,7 @@ Validation: title required, end after start, capacity 1–500.
 | Method | URL | Who | Purpose | Success | Errors |
 |---|---|---|---|---|---|
 | POST | `/api/shifts/{shiftId}/signups` | Vol | Sign up (confirmed or waitlisted) | 201 | 404, 409 duplicate / overlap / already started |
-| POST | `/api/signups/{id}/cancel` | Vol (own) | Cancel; promotes the next waitlisted person | 200 | 403, 404, 409 too late |
+| POST | `/api/signups/{id}/cancel` | Vol (own) | Cancel; promotes the next waitlisted person | 200 | 404 (also for someone else's sign-up, so the API doesn't reveal it exists), 409 too late |
 | GET | `/api/me/signups` | Vol | My upcoming and past sign-ups | 200 | – |
 | GET | `/api/shifts/{id}/signups` | Coord | Shift roster and waitlist | 200 | 404 |
 | PUT | `/api/signups/{id}/attendance` | Coord | Mark attended / no-show | 200 | 404, 409 shift not started or not confirmed |
