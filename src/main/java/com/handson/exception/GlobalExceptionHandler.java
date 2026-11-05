@@ -14,6 +14,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * Turns exceptions thrown anywhere in a controller or service into a consistent JSON error.
@@ -38,6 +39,12 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ApiError> handleUnreadableBody(HttpMessageNotReadableException ex) {
 		return respond(ApiError.of(HttpStatus.BAD_REQUEST, "Request body is missing or is not valid JSON."));
+	}
+
+	/** A URL value has the wrong type, e.g. /api/events/abc where a number was expected. */
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+		return respond(ApiError.of(HttpStatus.BAD_REQUEST, "Invalid value for '" + ex.getName() + "'."));
 	}
 
 	@ExceptionHandler(NotFoundException.class)
