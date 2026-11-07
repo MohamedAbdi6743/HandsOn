@@ -1,10 +1,12 @@
-# HandsOn – Architecture Proposal
+# HandsOn – Architecture
 
 HandsOn is a volunteer shift scheduler for a small nonprofit. Coordinators post events
 split into shifts. Volunteers sign up, cancel, or join a waitlist. Coordinators record
 attendance and see how many hours each volunteer has worked.
 
-This document is the plan we agree on before writing code.
+This document started as the design written before any code. It's been kept in sync with
+what was built; the "Changes during the build" section at the end lists where the
+implementation differs from the first plan, and why.
 
 ---
 
@@ -230,6 +232,7 @@ frontend/
     ├── event.ts        event detail: shifts, sign-up/cancel buttons, roster (coordinator)
     ├── my-shifts.ts    my sign-ups and total hours
     ├── manage-event.ts coordinator: create/edit event and its shifts
+    ├── roster.ts       coordinator: shift roster and attendance
     └── reports.ts      coordinator: hours report
 
 src/main/resources/static/
@@ -645,9 +648,9 @@ because it's easy to read.
 
 ---
 
-## 8. Milestone plan
+## 8. Milestone plan (all done)
 
-Each milestone is built, tested, explained and committed before the next one starts.
+Each milestone was built, tested, explained and merged through its own pull request.
 
 1. **Project setup:** Spring Boot skeleton, PostgreSQL in Docker, Flyway `V1` schema,
    app starts and connects.
@@ -662,4 +665,20 @@ Each milestone is built, tested, explained and committed before the next one sta
    sign-up/cancel.
 7. **Frontend part 2:** my shifts, coordinator manage-event page, roster, reports page.
 8. **Hardening & docs:** end-to-end manual test pass, security checks, README with
-   screenshots, final review.
+   screenshots, GitHub Actions CI, final review.
+
+---
+
+## 9. Changes during the build
+
+| Planned | Built | Why |
+|---|---|---|
+| Events before users | Users and security first (milestone 2) | Creating events and signing up both need the logged-in user; doing events first would have meant temporary code to throw away |
+| Cancel someone else's sign-up → 403 | → 404 | Doesn't reveal that the sign-up exists |
+| Delete an event and catch the foreign-key error | Count sign-ups first, then delete shifts and event | A test showed the "catch the error" approach breaks when Hibernate already has the shifts loaded |
+| `confirmedCount` = `CONFIRMED` rows | Display counts include `ATTENDED` / `NO_SHOW` | After marking attendance the roster said "0 of 4 spots filled"; capacity checks still use `CONFIRMED` only |
+| Events sorted by first shift | Sorted by next shift that hasn't ended | An event with a shift yesterday sorted first and showed the wrong date |
+| — | `GET /api/auth/csrf` | The frontend needs a way to get the CSRF cookie before its first change request |
+| — | Capacity changes promote from the waitlist; can't drop below confirmed count | Found while writing the sign-up rules: otherwise raising capacity left the waitlist stuck |
+| — | Content-Security-Policy header | Cheap second layer of XSS protection, since the pages have no inline scripts or styles |
+| Port 5432 / 8080 | Configurable `DB_PORT` / `APP_PORT` | Both ports were taken on the development machine |
