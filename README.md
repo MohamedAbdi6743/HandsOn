@@ -8,6 +8,11 @@ coordinators record who showed up, and the app adds up everyone's hours.
 
 Built with Java, Spring Boot, PostgreSQL and plain TypeScript.
 
+[![Watch the 20-second demo](docs/media/handson-demo-poster.jpg)](docs/media/handson-demo.mp4)
+
+*20-second demo (click to play): ten sign-ups for a three-spot shift, then the app in use
+by a volunteer and a coordinator.*
+
 ![Event page with sign-up states](docs/screenshots/event-signup.png)
 
 ## Why I built it
